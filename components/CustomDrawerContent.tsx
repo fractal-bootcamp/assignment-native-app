@@ -43,6 +43,11 @@ export default function CustomDrawerContent(props: any) {
                         <ThemedText>New Recipe</ThemedText>
                     </TouchableOpacity>
                 </Link>
+                <Link href="/signin" asChild>
+                    <TouchableOpacity>
+                        <ThemedText>Sign In</ThemedText>
+                    </TouchableOpacity>
+                </Link>
 
                 <ScrollView style={styles.recipeList}>
                     {dummyRecipes.map((recipe) => (
