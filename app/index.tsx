@@ -5,7 +5,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { authClient } from '@/lib/auth-client';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 
 export default function Index() {
     const [recipePrompt, setRecipePrompt] = useState('');
@@ -43,7 +43,7 @@ export default function Index() {
     return (
         <ThemedView style={styles.container}>
             <ThemedView style={styles.header}>
-                <ThemedText type="title">Little Chef</ThemedText>
+                <Text className="text-xl font-bold text-blue-500">Little Chef</Text>
                 <ThemedText type="subtitle">Your AI-powered recipe assistant!</ThemedText>
                 <ThemedText style={styles.welcomeText}>Welcome, {session.user?.name || session.user?.email}!</ThemedText>
             </ThemedView>

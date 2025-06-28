@@ -58,8 +58,8 @@ export const recipesRouter = t.router({
   // Get a single recipe by ID
   get: t.procedure
     .input(z.object({ id: z.string() }))
-    .output(z.object({ recipe: recipeSchema.optional() }))
-    .query(async ({ ctx, input }) => { return { recipe: undefined } }),
+    .output(z.object({ recipe: recipeSchema }))
+    .query(async ({ ctx, input }) => { return { recipe: null as any } }),
 
   // Create a new recipe manually
   create: t.procedure

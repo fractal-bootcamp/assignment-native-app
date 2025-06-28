@@ -1,11 +1,11 @@
+import CustomDrawerContent from '@/components/CustomDrawerContent';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { TRPCClientProvider } from '@/lib/trpc/trpc';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Drawer } from 'expo-router/drawer';
-
-import CustomDrawerContent from '@/components/CustomDrawerContent';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { TRPCClientProvider, TRPCProvider } from '@/lib/trpc/trpc';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import "../global.css";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

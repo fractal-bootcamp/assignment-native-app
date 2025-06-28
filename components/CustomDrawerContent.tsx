@@ -60,7 +60,7 @@ export default function CustomDrawerContent(props: any) {
                                 }
                             ]}
                             onPress={() => {
-                                router.push('/recipe');
+                                router.push(`/recipe/${recipe.id}`);
                             }}
                         >
                             <ThemedText style={styles.recipeTitle}>{recipe.name}</ThemedText>
