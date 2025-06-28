@@ -2,26 +2,29 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { authClient } from '@/lib/auth-client';
+import { useTRPC } from '@/lib/trpc/trpc';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { useQuery } from '@tanstack/react-query';
 import { Link, useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 
-// Dummy recipe data
-const dummyRecipes = [
-    { id: 1, title: 'Spaghetti Carbonara', category: 'Italian' },
-    { id: 2, title: 'Chicken Tikka Masala', category: 'Indian' },
-    { id: 3, title: 'Caesar Salad', category: 'Salad' },
-    { id: 4, title: 'Chocolate Chip Cookies', category: 'Dessert' },
-    { id: 5, title: 'Beef Stir Fry', category: 'Asian' },
-    { id: 6, title: 'Margherita Pizza', category: 'Italian' },
-    { id: 7, title: 'Fish Tacos', category: 'Mexican' },
-    { id: 8, title: 'Greek Yogurt Parfait', category: 'Breakfast' },
-];
 
 export default function CustomDrawerContent(props: any) {
     const colorScheme = useColorScheme();
     const router = useRouter();
+    const { data: session, isPending: sessionLoading } = authClient.useSession();
+    const trpc = useTRPC(); // use `import { trpc } from './utils/trpc'` if you're using the singleton pattern
+    const { data: recipeData, isLoading: recipeLoading, error: recipeError } = useQuery(trpc.recipes.list.queryOptions());
+
+    useEffect(() => {
+        if (recipeError) {
+            console.error(recipeError);
+        } else {
+            console.log(recipeData);
+        }
+    }, [recipeError, recipeData]);
 
     return (
         <DrawerContentScrollView {...props}>
@@ -35,22 +38,19 @@ export default function CustomDrawerContent(props: any) {
             </ThemedView>
 
             <ThemedView style={styles.section}>
-                <ThemedText type="subtitle" style={styles.sectionTitle}>
-                    Saved Recipes
-                </ThemedText>
                 <Link href="/" asChild>
                     <TouchableOpacity>
-                        <ThemedText>New Recipe</ThemedText>
+                        <ThemedText>+</ThemedText>
                     </TouchableOpacity>
                 </Link>
-                <Link href="/signin" asChild>
+                {session && !session.user && <Link href="/signin" asChild>
                     <TouchableOpacity>
                         <ThemedText>Sign In</ThemedText>
                     </TouchableOpacity>
-                </Link>
+                </Link>}
 
                 <ScrollView style={styles.recipeList}>
-                    {dummyRecipes.map((recipe) => (
+                    {(recipeData?.recipes ?? []).map((recipe) => (
                         <TouchableOpacity
                             key={recipe.id}
                             style={[
@@ -63,8 +63,7 @@ export default function CustomDrawerContent(props: any) {
                                 router.push('/recipe');
                             }}
                         >
-                            <ThemedText style={styles.recipeTitle}>{recipe.title}</ThemedText>
-                            <ThemedText style={styles.recipeCategory}>{recipe.category}</ThemedText>
+                            <ThemedText style={styles.recipeTitle}>{recipe.name}</ThemedText>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
