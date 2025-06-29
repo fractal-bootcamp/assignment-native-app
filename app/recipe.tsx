@@ -1,17 +1,16 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { TText } from '@/components/ThemedText';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export default function Recipe() {
 
     return (
-        <ThemedView style={styles.container}>
-            <ThemedView style={styles.header}>
-                <ThemedText type="title">Recipes Here</ThemedText>
-                <ThemedText type="subtitle">Yummy</ThemedText>
-            </ThemedView>
-        </ThemedView>
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <TText type="title">Recipes Here</TText>
+                <TText type="subtitle">Yummy</TText>
+            </View>
+        </View>
     );
 }
 

@@ -7,7 +7,16 @@ module.exports = {
   ],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'sans': ['PlayfairDisplay-Regular'],
+        'playfair': ['PlayfairDisplay-Regular'],
+        'playfair-bold': ['PlayfairDisplay-Bold'],
+        'playfair-italic': ['PlayfairDisplay-Italic'],
+        'playfair-bold-italic': ['PlayfairDisplay-BoldItalic'],
+        'playfair-semi-bold': ['PlayfairDisplay-SemiBold'],
+      },
+    },
   },
   plugins: [],
 }

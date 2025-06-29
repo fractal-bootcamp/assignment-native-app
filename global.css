@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-bold {
+    font-family: 'PlayfairDisplay-Bold';
+}
+
+.font-semibold {
+    font-family: 'PlayfairDisplay-SemiBold';
+}
+
+.font-regular {
+    font-family: 'PlayfairDisplay-Regular';
+}

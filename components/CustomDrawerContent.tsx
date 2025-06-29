@@ -1,6 +1,4 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { Colors } from '@/constants/Colors';
+import { TText } from '@/components/ThemedText';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { authClient } from '@/lib/auth-client';
 import { useTRPC } from '@/lib/trpc/trpc';
@@ -8,8 +6,7 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 
 export default function CustomDrawerContent(props: any) {
     const colorScheme = useColorScheme();
@@ -26,97 +23,70 @@ export default function CustomDrawerContent(props: any) {
         }
     }, [recipeError, recipeData]);
 
-    return (
-        <DrawerContentScrollView {...props}>
-            <ThemedView style={styles.drawerHeader}>
-                <ThemedText type="title" style={styles.headerTitle}>
-                    Little Chef
-                </ThemedText>
-                <ThemedText type="subtitle" style={styles.headerSubtitle}>
-                    Recipe Collection
-                </ThemedText>
-            </ThemedView>
+    const logoutButton = (
+        <TouchableOpacity onPress={() => {
+            authClient.signOut();
+            router.push('/signin');
+        }}>
+            <TText className="text-sm opacity-70">
+                Logout
+            </TText>
+        </TouchableOpacity>
+    )
+    const loginButton = (
+        <Link href="/signin" asChild>
+            <TouchableOpacity>
+                <TText>Sign In</TText>
+            </TouchableOpacity>
+        </Link>
+    )
+    function loginOrLogoutButton() {
+        if (sessionLoading) {
+            return (<View></View>)
+        } else {
+            return (session ? logoutButton : loginButton)
+        }
+    }
 
-            <ThemedView style={styles.section}>
+    return (
+        <DrawerContentScrollView {...props}
+            style={{ backgroundColor: '#f5efe9' }}
+            contentContainerStyle={{ paddingStart: 0, paddingEnd: 0 }}>
+            <View className="p-5 pt-10 border-[#e8d5c4] bg-[#e8d5c4] flex flex-row justify-between">
+                <TText className="text-2xl font-[PlayfairDisplay-Bold] mb-1">
+                    Little Chef
+                </TText>
+                {loginOrLogoutButton()}
+            </View>
+
+            <View className="p-5 border-[#e8d5c4] bg-[#f5efe9]">
                 <Link href="/" asChild>
                     <TouchableOpacity>
-                        <ThemedText>+</ThemedText>
+                        <TText>+</TText>
                     </TouchableOpacity>
                 </Link>
                 {session && !session.user && <Link href="/signin" asChild>
                     <TouchableOpacity>
-                        <ThemedText>Sign In</ThemedText>
+                        <TText>Sign In</TText>
                     </TouchableOpacity>
                 </Link>}
 
-                <ScrollView style={styles.recipeList}>
+                <ScrollView className="max-h-75">
                     {(recipeData?.recipes ?? []).map((recipe) => (
                         <TouchableOpacity
                             key={recipe.id}
-                            style={[
-                                styles.recipeItem,
-                                {
-                                    borderBottomColor: Colors[colorScheme ?? 'light'].tabIconDefault,
-                                }
-                            ]}
+                            className={`py-3 border-b border-gray-300`}
                             onPress={() => {
                                 router.push(`/recipe/${recipe.id}`);
                             }}
                         >
-                            <ThemedText style={styles.recipeTitle}>{recipe.name}</ThemedText>
+                            <TText type="defaultSemiBold" className="text-base font-medium mb-0.5">{recipe.name}</TText>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
-            </ThemedView>
+            </View>
 
-            <ThemedView style={styles.divider} />
-        </DrawerContentScrollView>
+            <View className="h-px my-2.5 border-[#e8d5c4] bg-[#f5efe9]" />
+        </ DrawerContentScrollView>
     );
-}
-
-const styles = StyleSheet.create({
-    drawerHeader: {
-        padding: 20,
-        paddingTop: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: '#e0e0e0',
-    },
-    headerTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 4,
-    },
-    headerSubtitle: {
-        fontSize: 14,
-        opacity: 0.7,
-    },
-    section: {
-        padding: 20,
-    },
-    sectionTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        marginBottom: 12,
-    },
-    recipeList: {
-        maxHeight: 300,
-    },
-    recipeItem: {
-        paddingVertical: 12,
-        borderBottomWidth: 1,
-    },
-    recipeTitle: {
-        fontSize: 16,
-        fontWeight: '500',
-        marginBottom: 2,
-    },
-    recipeCategory: {
-        fontSize: 12,
-        opacity: 0.6,
-    },
-    divider: {
-        height: 1,
-        backgroundColor: '#e0e0e0',
-        marginVertical: 10,
-    },
-}); 
+} 

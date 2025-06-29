@@ -1,11 +1,9 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { Colors } from '@/constants/Colors';
+import { TText } from '@/components/ThemedText';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { authClient } from '@/lib/auth-client';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function Index() {
     const [recipePrompt, setRecipePrompt] = useState('');
@@ -30,9 +28,9 @@ export default function Index() {
 
     if (sessionLoading) {
         return (
-            <ThemedView style={styles.container}>
-                <ThemedText>Loading...</ThemedText>
-            </ThemedView>
+            <View className="flex-1 p-5">
+                <TText>Loading...</TText>
+            </View>
         );
     }
 
@@ -41,25 +39,18 @@ export default function Index() {
     }
 
     return (
-        <ThemedView style={styles.container}>
-            <ThemedView style={styles.header}>
-                <Text className="text-xl font-bold text-blue-500">Little Chef</Text>
-                <ThemedText type="subtitle">Your AI-powered recipe assistant!</ThemedText>
-                <ThemedText style={styles.welcomeText}>Welcome, {session.user?.name || session.user?.email}!</ThemedText>
-            </ThemedView>
+        <View className="flex-1 p-5 bg-[#f5efe9]">
+            <View className="items-center mt-15 mb-10">
+                <TText className="text-4xl">Little Chef</TText>
+                <TText className="font-semibold">Your AI-powered recipe assistant!</TText>
+                <TText className="mt-2 text-sm opacity-70">Welcome, {session.user?.name || session.user?.email}!</TText>
+            </View>
 
-            <ThemedView style={styles.inputContainer}>
+            <View className="gap-4 mb-10">
                 <TextInput
-                    style={[
-                        styles.textInput,
-                        {
-                            backgroundColor: Colors[colorScheme ?? 'light'].background,
-                            color: Colors[colorScheme ?? 'light'].text,
-                            borderColor: Colors[colorScheme ?? 'light'].tint,
-                        }
-                    ]}
+                    className={`border rounded-xl p-4 text-base min-h-[120px]`}
                     placeholder="Describe what you want to cook..."
-                    placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
+                    placeholderTextColor={colorScheme === 'dark' ? '#9CA3AF' : '#6B7280'}
                     value={recipePrompt}
                     onChangeText={setRecipePrompt}
                     multiline
@@ -68,83 +59,24 @@ export default function Index() {
                 />
 
                 <TouchableOpacity
-                    style={[
-                        styles.generateButton
-                    ]}
+                    className="bg-blue-500 p-4 rounded-xl items-center"
                     onPress={handleGenerateRecipe}
                 >
-                    <ThemedText style={styles.buttonText}>Generate Recipe</ThemedText>
+                    <TText className="text-white">Generate Recipe</TText>
                 </TouchableOpacity>
-            </ThemedView>
+            </View>
 
-            <ThemedView style={styles.placeholder}>
-                <ThemedText type="subtitle">Your generated recipe will appear here</ThemedText>
-                <ThemedText>Open the drawer to see your saved recipes</ThemedText>
-            </ThemedView>
+            <View className="flex-1 justify-center items-center opacity-60">
+                <TText>Your generated recipe will appear here</TText>
+                <TText>Open the drawer to see your saved recipes</TText>
+            </View>
 
             <TouchableOpacity
-                style={styles.signOutButton}
+                className="absolute top-15 right-5 p-2 rounded-lg bg-red-500"
                 onPress={handleSignOut}
             >
-                <ThemedText style={styles.signOutButtonText}>Sign Out</ThemedText>
+                <TText type="defaultSemiBold" className="text-white text-sm font-medium">Sign Out</TText>
             </TouchableOpacity>
-        </ThemedView>
+        </View>
     );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-    },
-    header: {
-        alignItems: 'center',
-        marginTop: 60,
-        marginBottom: 40,
-    },
-    welcomeText: {
-        marginTop: 8,
-        fontSize: 14,
-        opacity: 0.7,
-    },
-    inputContainer: {
-        gap: 16,
-        marginBottom: 40,
-    },
-    textInput: {
-        borderWidth: 1,
-        borderRadius: 12,
-        padding: 16,
-        fontSize: 16,
-        minHeight: 120,
-    },
-    generateButton: {
-        padding: 16,
-        borderRadius: 12,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
-    placeholder: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        opacity: 0.6,
-    },
-    signOutButton: {
-        position: 'absolute',
-        top: 60,
-        right: 20,
-        padding: 8,
-        borderRadius: 8,
-        backgroundColor: '#FF3B30',
-    },
-    signOutButtonText: {
-        color: 'white',
-        fontSize: 14,
-        fontWeight: '500',
-    },
-}); 
+} 

@@ -1,11 +1,10 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { TText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { authClient } from '@/lib/auth-client';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function SignIn() {
     const [email, setEmail] = useState('');
@@ -58,13 +57,13 @@ export default function SignIn() {
     };
 
     return (
-        <ThemedView style={styles.container}>
-            <ThemedView style={styles.header}>
-                <ThemedText type="title">Welcome to Little Chef</ThemedText>
-                <ThemedText type="subtitle">Sign in to get started</ThemedText>
-            </ThemedView>
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <TText type="title">Welcome to Little Chef</TText>
+                <TText type="subtitle">Sign in to get started</TText>
+            </View>
 
-            <ThemedView style={styles.form}>
+            <View style={styles.form}>
                 <TextInput
                     style={[
                         styles.textInput,
@@ -103,9 +102,9 @@ export default function SignIn() {
                     onPress={handleEmailSignIn}
                     disabled={isLoading}
                 >
-                    <ThemedText style={styles.buttonText}>
+                    <TText style={styles.buttonText}>
                         {isLoading ? 'Signing In...' : 'Sign In'}
-                    </ThemedText>
+                    </TText>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -113,12 +112,12 @@ export default function SignIn() {
                     onPress={handleSignUp}
                     disabled={isLoading}
                 >
-                    <ThemedText style={[styles.buttonText, styles.secondaryButtonText]}>
+                    <TText style={[styles.buttonText, styles.secondaryButtonText]}>
                         Create Account
-                    </ThemedText>
+                    </TText>
                 </TouchableOpacity>
-            </ThemedView>
-        </ThemedView>
+            </View>
+        </View>
     );
 }
 
