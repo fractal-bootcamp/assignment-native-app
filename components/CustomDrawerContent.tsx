@@ -3,7 +3,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { authClient } from '@/lib/auth-client';
 import { useTRPC } from '@/lib/trpc/trpc';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
@@ -11,9 +11,12 @@ import { ScrollView, TouchableOpacity, View } from 'react-native';
 export default function CustomDrawerContent(props: any) {
     const colorScheme = useColorScheme();
     const router = useRouter();
+    const queryClient = useQueryClient();
     const { data: session, isPending: sessionLoading } = authClient.useSession();
-    const trpc = useTRPC(); // use `import { trpc } from './utils/trpc'` if you're using the singleton pattern
+    const trpc = useTRPC();
     const { data: recipeData, isLoading: recipeLoading, error: recipeError } = useQuery(trpc.recipes.list.queryOptions());
+
+    console.log("re-rendering drawer!")
 
     useEffect(() => {
         if (recipeError) {
@@ -26,6 +29,7 @@ export default function CustomDrawerContent(props: any) {
     const logoutButton = (
         <TouchableOpacity onPress={() => {
             authClient.signOut();
+            queryClient.invalidateQueries({ queryKey: trpc.recipes.list.queryKey() });
             router.push('/signin');
         }}>
             <TText className="text-sm opacity-70">

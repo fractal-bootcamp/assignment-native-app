@@ -2,7 +2,7 @@ import { TText } from '@/components/ThemedText';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { authClient } from '@/lib/auth-client';
 import { useTRPC } from '@/lib/trpc/trpc';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { TextInput, TouchableOpacity, View } from 'react-native';
@@ -11,6 +11,7 @@ export default function Index() {
     const [recipePrompt, setRecipePrompt] = useState('');
     const colorScheme = useColorScheme();
     const trpc = useTRPC();
+    const queryClient = useQueryClient();
     const { data: session, isPending: sessionLoading } = authClient.useSession();
     const generateRecipeMutation = useMutation(trpc.recipes.generate.mutationOptions());
 
@@ -23,6 +24,7 @@ export default function Index() {
     const handleGenerateRecipe = () => {
         generateRecipeMutation.mutate({ text: recipePrompt }, {
             onSuccess: (data) => {
+                queryClient.invalidateQueries({ queryKey: trpc.recipes.list.queryKey() });
                 router.push(`/recipe/${data.recipe.id}`);
             }
         });

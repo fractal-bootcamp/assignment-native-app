@@ -1,7 +1,8 @@
 'use client';
 
 import { TText } from '@/components/ThemedText';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useTRPC } from '../lib/trpc/trpc';
@@ -14,6 +15,7 @@ interface RecipeDisplayProps {
 
 export function RecipeDisplay({ recipe }: RecipeDisplayProps) {
     const trpc = useTRPC();
+    const queryClient = useQueryClient();
     const deleteRecipeMutation = useMutation(trpc.recipes.delete.mutationOptions());
     const [hoveredIngredient, setHoveredIngredient] = useState<string | null>(null);
 
@@ -26,7 +28,14 @@ export function RecipeDisplay({ recipe }: RecipeDisplayProps) {
                 {
                     text: 'Delete',
                     style: 'destructive',
-                    onPress: () => deleteRecipeMutation.mutate({ id: recipe.id })
+                    onPress: () => {
+                        deleteRecipeMutation.mutate({ id: recipe.id }, {
+                            onSuccess: () => {
+                                queryClient.invalidateQueries({ queryKey: trpc.recipes.list.queryKey() });
+                                router.push('/');
+                            }
+                        });
+                    }
                 }
             ]
         );
