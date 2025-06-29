@@ -69,7 +69,8 @@ export const recipesRouter = t.router({
   // Generate a recipe from text description
   generate: t.procedure
     .input(z.object({ text: z.string() }))
-    .mutation(async ({ ctx, input }) => { }),
+    .output(z.object({ recipe: recipeSchema }))
+    .mutation(async ({ ctx, input }) => { return { recipe: null as any } }),
 
   // Delete a recipe
   delete: t.procedure

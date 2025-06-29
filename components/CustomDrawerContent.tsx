@@ -51,20 +51,23 @@ export default function CustomDrawerContent(props: any) {
     return (
         <DrawerContentScrollView {...props}
             style={{ backgroundColor: '#f5efe9' }}
-            contentContainerStyle={{ paddingStart: 0, paddingEnd: 0 }}>
-            <View className="p-5 pt-10 border-[#e8d5c4] bg-[#e8d5c4] flex flex-row justify-between">
-                <TText className="text-2xl font-[PlayfairDisplay-Bold] mb-1">
+            contentContainerStyle={{ paddingStart: 0, paddingEnd: 0, paddingTop: 0, paddingBottom: 0, marginTop: 0 }}>
+            <View className="p-5 pt-20 border-[#e8d5c4] bg-[#e8d5c4] flex flex-row justify-between">
+                <TText className="text-2xl flex-[2] font-[PlayfairDisplay-Bold]">
                     Little Chef
                 </TText>
                 {loginOrLogoutButton()}
             </View>
 
             <View className="p-5 border-[#e8d5c4] bg-[#f5efe9]">
-                <Link href="/" asChild>
-                    <TouchableOpacity>
-                        <TText>+</TText>
-                    </TouchableOpacity>
-                </Link>
+                <View className="flex flex-row justify-between items-center">
+                    <TText className='text-lg font-[PlayfairDisplay-SemiBold]'>Saved Recipes</TText>
+                    <Link href="/" asChild>
+                        <TouchableOpacity className='bg-blue-500 rounded-full w-10 h-10 items-center justify-center'>
+                            <TText className='text-xl font-[PlayfairDisplay-Bold] text-white'>+</TText>
+                        </TouchableOpacity>
+                    </Link>
+                </View>
                 {session && !session.user && <Link href="/signin" asChild>
                     <TouchableOpacity>
                         <TText>Sign In</TText>
